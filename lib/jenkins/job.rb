@@ -4,7 +4,7 @@ module Jenkins
   class Job
 
     def initialize(url, name = nil)
-      @url = url
+      @url = url.gsub(' ','%20')
       @name = name
     end
 
@@ -15,7 +15,6 @@ module Jenkins
 
     def config
       config_url = "#@url/job/#@name/config.xml"
-      puts config_url
       `curl -s #{config_url}`
     end
 

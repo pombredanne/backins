@@ -12,7 +12,8 @@ url = ARGV[0]
 store = Jenkins::Store.new
 store_directory = store.location
 Jenkins::Job.find(url).each do |job|
-  file_name = job + '.xml'
+  file_name = job + '.xml'.gsub(' ', '_')
   File.open(File.join(store_directory, file_name), 'w+') {|f| f << Jenkins::Job.new(url, job).config }
-  `(cd #{store_directory} && git commit -m 'Jenkins backup' #{file_name}`
+  `(cd #{store_directory} && git add #{file_name})`
 end
+`(cd #{store_directory} && git commit -am 'Jenkins backup' )`
